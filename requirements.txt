@@ -6,10 +6,8 @@ dash-core-components
 dash-html-components
 dash-table
 dateutils
-Flask==2.2.5
-fonttools==4.42.1
-frozendict==2.3.8
-html5lib==1.1
+Flask
+html5lib
 importlib-metadata
 importlib-resources
 itsdangerous
