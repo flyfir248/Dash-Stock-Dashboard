@@ -40,6 +40,14 @@ app.layout = html.Div([
         dcc.Tab(label='Price Prediction (Next 10 Days)', value='tab-5'),
         dcc.Tab(label='Regression Models & Prediction', value='tab-6')
     ]),
+    dcc.Dropdown(
+        id='theme-selector',
+        options=[
+            {'label': 'Light Theme', 'value': 'light'},
+            {'label': 'Dark Theme', 'value': 'dark'}
+        ],
+        value='light'
+    ),
     html.Div(id='tabs-content')
 ])
 
@@ -52,6 +60,38 @@ def render_content(tab):
         return html.Div([
             html.H2("Data Summary & Exploratory Data Analysis"),
             # Add content for Data Summary & EDA here if needed
+        ])
+    elif tab == 'tab-3':
+        # Moving Averages & Returns Page
+        moving_averages = dcc.Graph(
+            id='moving-averages',
+            figure=px.line(tata, x=tata.index, y=['30_Day_MA'], labels={'x': 'Date', 'y': '30-Day Moving Average'},
+                           title='30-Day Moving Average')
+        )
+
+        moving_averages.add_trace(go.Scatter(
+            x=tata.index,
+            y=tata['60_Day_MA'],
+            mode='lines',
+            name='60-Day Moving Average'
+        ))
+
+        returns_calculation = dcc.Graph(
+            id='returns-calculation',
+            figure=px.line(tata, x=tata.index, y='DailyReturn',
+                            title='Tata Motors Ltd. Daily Returns')
+        )
+
+        return html.Div([
+            html.H2("Moving Averages & Returns"),
+            html.Div([
+                moving_averages,
+                html.H3("Moving Averages"),
+            ]),
+            html.Div([
+                returns_calculation,
+                html.H3("Returns Calculation"),
+            ]),
         ])
     elif tab == 'tab-2':
         # Close Price Analysis Page
@@ -101,17 +141,22 @@ def render_content(tab):
             ]),
         ])
     elif tab == 'tab-3':
+        # Calculate 30-Day and 60-Day Moving Averages
+        tata['30_Day_MA'] = tata['Close'].rolling(window=30).mean()
+        tata['60_Day_MA'] = tata['Close'].rolling(window=60).mean()
+
         # Moving Averages & Returns Page
         moving_averages = dcc.Graph(
             id='moving-averages',
-            figure=px.line(tata, x=tata.index, y=['30_Day_MA'], labels={'x': 'Date', 'y': '30-Day Moving Average'},
-                           title='30-Day Moving Average')
+            figure=px.line(tata, x=tata.index, y=['30_Day_MA', '60_Day_MA'],
+                           labels={'x': 'Date', 'y': 'Moving Average'},
+                           title='30-Day and 60-Day Moving Averages')
         )
 
         returns_calculation = dcc.Graph(
             id='returns-calculation',
             figure=px.line(tata, x=tata.index, y='DailyReturn',
-                            title='Tata Motors Ltd. Daily Returns')
+                           title='Tata Motors Ltd. Daily Returns')
         )
 
         return html.Div([
@@ -125,6 +170,7 @@ def render_content(tab):
                 html.H3("Returns Calculation"),
             ]),
         ])
+
     elif tab == 'tab-4':
         # Volatility Analysis Page
         volatility_analysis = dcc.Graph(
@@ -487,6 +533,5 @@ def render_content(tab):
             ]),
         ])
 
-
 if __name__ == '__main__':
-    app.run_server(debug=True)
+        app.run_server(debug=True)
