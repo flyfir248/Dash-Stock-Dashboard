@@ -65,3 +65,14 @@ Contributions are welcome! If you would like to contribute to this project, plea
 # License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+## references
+
+https://www.nseindia.com/market-data/real-time-data-subscription
+
+https://nsetools.readthedocs.io/en/latest/usage.html
+
+https://nsetools.readthedocs.io/en/latest/introduction.html
+
+https://nsetools.readthedocs.io/en/latest/usage.html
