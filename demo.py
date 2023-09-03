@@ -12,7 +12,7 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR
 
 # Load historical stock data
-tata = pd.read_csv("historical_stock_data/Tata_Motors_Ltd._historical_data.csv")
+tata = pd.read_csv("historical_stock_data/Adani_Power_Ltd._historical_data.csv")
 tata['Date'] = pd.to_datetime(tata['Date'])
 tata.set_index('Date', inplace=True)
 
@@ -31,7 +31,7 @@ app = dash.Dash(__name__)
 
 # Define the layout for the main page
 app.layout = html.Div([
-    html.H1("Tata Motors Stock Analysis Dashboard"),
+    html.H1("Stock Analysis Dashboard"),
     dcc.Tabs(id='tabs', value='tab-1', children=[
         dcc.Tab(label='Data Summary & EDA', value='tab-1'),
         dcc.Tab(label='Close Price Analysis', value='tab-2'),
@@ -46,7 +46,7 @@ app.layout = html.Div([
             {'label': 'Light Theme', 'value': 'light'},
             {'label': 'Dark Theme', 'value': 'dark'}
         ],
-        value='light'
+        #value='light'
     ),
     html.Div(id='tabs-content')
 ])

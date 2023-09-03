@@ -1,6 +1,7 @@
 import os
 import yfinance as yf
 from nsetools import Nse
+from datetime import datetime
 
 # Define a dictionary that maps company names to stock symbols
 company_symbol_mapping = {
@@ -106,22 +107,25 @@ company_symbol_mapping = {
 }
 
 
-def download_historical_data(company_symbol_mapping, output_directory, start_date, end_date):
+def download_historical_data(stock_symbol, output_directory, start_date, end_date):
     # Create the output directory if it doesn't exist
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
-    for company_name, stock_symbol in company_symbol_mapping.items():
-        # Fetch historical stock data using yfinance
-        data = yf.download(stock_symbol, start=start_date, end=end_date)
+    # Convert end_date to the current system date
+    if end_date == "system_date":
+        end_date = datetime.today().strftime('%Y-%m-%d')
 
-        # Create a CSV file name based on the company name
-        csv_filename = os.path.join(output_directory, f"{company_name.replace(' ', '_')}_historical_data.csv")
+    # Fetch historical stock data using yfinance
+    data = yf.download(stock_symbol, start=start_date, end=end_date)
 
-        # Save the data to a CSV file with date as the index
-        data.to_csv(csv_filename)
+    # Create a CSV file name based on the stock symbol
+    csv_filename = os.path.join(output_directory, f"{stock_symbol}.csv")
 
-        print(f"Saved historical data for {company_name} to {csv_filename}")
+    # Save the data to a CSV file with date as the index
+    data.to_csv(csv_filename)
+
+    print(f"Saved historical data for {stock_symbol} to {csv_filename}")
 
 if __name__ == "__main__":
     # Directory to store CSV files
@@ -129,7 +133,14 @@ if __name__ == "__main__":
 
     # Date range for historical data
     start_date = "2000-01-01"
-    end_date = "2023-09-02"
+    end_date = "system_date"  # Set end_date to "system_date" for the current system date
 
-    # Download historical data
-    download_historical_data(company_symbol_mapping, output_directory, start_date, end_date)
+    # Get user input for the company name
+    user_input = input("Enter a company name: ")
+    stock_symbol = company_symbol_mapping.get(user_input)
+
+    if stock_symbol:
+        # Download historical data for the specified company
+        download_historical_data(stock_symbol, output_directory, start_date, end_date)
+    else:
+        print("Company not found in the mapping.")
