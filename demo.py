@@ -12,7 +12,7 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR
 
 # Load historical stock data
-tata = pd.read_csv("historical_stock_data/Adani_Power_Ltd._historical_data.csv")
+tata = pd.read_csv("historical_stock_data/Tata_Motors_Ltd._historical_data.csv")
 tata['Date'] = pd.to_datetime(tata['Date'])
 tata.set_index('Date', inplace=True)
 
